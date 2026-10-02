@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  SafeAreaView,
   View,
   Text,
   TouchableOpacity,
@@ -8,6 +7,8 @@ import {
   ScrollView,
   StatusBar,
 } from 'react-native';
+
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen({ navigation }) {
   return (

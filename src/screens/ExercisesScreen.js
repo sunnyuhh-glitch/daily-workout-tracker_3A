@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  SafeAreaView,
   View,
   Text,
   TouchableOpacity,
@@ -8,6 +7,7 @@ import {
   StyleSheet,
   StatusBar,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Hardcoded exercise data for the MCO1 prototype
 const exercises = [
