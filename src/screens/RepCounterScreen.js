@@ -15,11 +15,13 @@ export default function RepCounterScreen({
   route,
 }) {
   // Receive data from StartWorkoutScreen
-  const {
-    workoutName,
-    exercises,
-    currentExerciseIndex = 0,
-  } = route.params;
+ const {
+  workoutName,
+  exercises,
+  currentExerciseIndex = 0,
+  previousSets = 0,
+  previousReps = 0,
+} = route.params;
 
   // Current exercise being performed
   const currentExercise =
@@ -65,6 +67,12 @@ export default function RepCounterScreen({
       newSet,
     ]);
   };
+  const currentExerciseReps = completedSets.reduce(
+  (total, set) => total + set.reps,
+  0
+);
+
+const currentExerciseSets = completedSets.length;
 
   const allSetsCompleted =
     completedSets.length >= currentExercise.sets;
@@ -73,22 +81,36 @@ export default function RepCounterScreen({
     currentExerciseIndex === exercises.length - 1;
 
   // Go to the next selected exercise
-  const nextExercise = () => {
-    navigation.replace('RepCounter', {
-      workoutName,
-      exercises,
-      currentExerciseIndex:
-        currentExerciseIndex + 1,
-    });
-  };
+ const nextExercise = () => {
+  navigation.replace('RepCounter', {
+    workoutName,
+    exercises,
+    currentExerciseIndex:
+      currentExerciseIndex + 1,
+
+    previousSets:
+      previousSets + currentExerciseSets,
+
+    previousReps:
+      previousReps + currentExerciseReps,
+  });
+};
 
   // Finish the workout
-  const finishWorkout = () => {
-    navigation.navigate('WorkoutSummary', {
-      workoutName,
-      totalExercises: exercises.length,
-    });
-  };
+ const finishWorkout = () => {
+  const totalSets =
+    previousSets + currentExerciseSets;
+
+  const totalReps =
+    previousReps + currentExerciseReps;
+
+  navigation.navigate('WorkoutSummary', {
+    workoutName,
+    totalExercises: exercises.length,
+    totalSets,
+    totalReps,
+  });
+};
 
   const renderCompletedSet = ({ item }) => (
     <View style={styles.completedSet}>
