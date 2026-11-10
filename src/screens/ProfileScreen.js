@@ -40,17 +40,17 @@ export default function ProfileScreen() {
         <View style={styles.profileCard}>
           <View style={styles.avatar}>
             <Text style={styles.avatarText}>
-              DW
+              SC
             </Text>
           </View>
 
           <Text style={styles.userName}>
-            Daily Workout User
+            Sunny Corpin
           </Text>
 
           <View style={styles.levelBadge}>
             <Text style={styles.levelText}>
-              Beginner
+              Experienced
             </Text>
           </View>
 

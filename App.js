@@ -44,7 +44,7 @@ function MainTabs() {
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => (
-            <TabIcon icon="⌂" color={color} />
+            <TabIcon icon="🏡" color={color} />
           ),
         }}
       />
@@ -55,7 +55,7 @@ function MainTabs() {
         options={{
           tabBarLabel: 'Exercises',
           tabBarIcon: ({ color }) => (
-            <TabIcon icon="◆" color={color} />
+            <TabIcon icon="🤺" color={color} />
           ),
         }}
       />
@@ -66,7 +66,7 @@ function MainTabs() {
         options={{
           tabBarLabel: 'History',
           tabBarIcon: ({ color }) => (
-            <TabIcon icon="◷" color={color} />
+            <TabIcon icon="⌛" color={color} />
           ),
         }}
       />
@@ -77,7 +77,7 @@ function MainTabs() {
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => (
-            <TabIcon icon="●" color={color} />
+            <TabIcon icon="🙍‍♂️" color={color} />
           ),
         }}
       />

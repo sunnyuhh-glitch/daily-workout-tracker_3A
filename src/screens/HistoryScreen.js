@@ -17,7 +17,7 @@ const workoutHistory = [
     name: 'Full Body Workout',
     date: 'Today',
     exercises: 3,
-    sets: 9,
+    sets: 12,
     reps: 108,
     icon: '🏋️',
   },
@@ -39,6 +39,7 @@ const workoutHistory = [
     reps: 60,
     icon: '🔥',
   },
+  
 ];
 
 export default function HistoryScreen() {

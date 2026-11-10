@@ -30,7 +30,7 @@ export default function HomeScreen({ navigation }) {
             </Text>
 
             <Text style={styles.greeting}>
-              Good morning! 👋
+              Good evening! 👋
             </Text>
 
             <Text style={styles.subtitle}>
@@ -54,7 +54,7 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.progressStats}>
             <View style={styles.progressStat}>
               <Text style={styles.progressNumber}>
-                0
+                3
               </Text>
 
               <Text style={styles.progressStatLabel}>
@@ -66,7 +66,7 @@ export default function HomeScreen({ navigation }) {
 
             <View style={styles.progressStat}>
               <Text style={styles.progressNumber}>
-                0
+                3
               </Text>
 
               <Text style={styles.progressStatLabel}>
@@ -77,7 +77,7 @@ export default function HomeScreen({ navigation }) {
 
           <View style={styles.goalHeader}>
             <Text style={styles.goalText}>
-              Daily Goal: 20 sets
+              Daily Goal: 10 sets
             </Text>
 
             <Text style={styles.goalPercent}>

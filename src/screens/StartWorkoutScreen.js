@@ -165,7 +165,7 @@ export default function StartWorkoutScreen({ navigation }) {
     );
   };
 
-  return (
+return (
     <SafeAreaView
       style={styles.container}
       edges={['bottom']}
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
   },
-
+  
   input: {
     height: 50,
     backgroundColor: '#FFFFFF',
