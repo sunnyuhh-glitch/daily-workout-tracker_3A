@@ -34,6 +34,28 @@ export const loadWorkouts = async () => {
   }
 };
 
+
+// Add one new workout record
+export const addWorkout = async (workout) => {
+  try {
+    // 1. Get previously saved workouts
+    const workouts = await loadWorkouts();
+
+    // 2. Add the new workout to the existing list
+    const updatedWorkouts = [...workouts, workout];
+
+    // 3. Save the updated list
+    await saveWorkouts(updatedWorkouts);
+
+    // 4. Return the updated list
+    return updatedWorkouts;
+  } catch (error) {
+    console.error('Error adding workout:', error);
+    throw error;
+  }
+};
+
+
 // Delete all workout records from local storage
 export const clearWorkouts = async () => {
   try {
