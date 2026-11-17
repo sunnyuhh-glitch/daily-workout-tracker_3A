@@ -56,6 +56,40 @@ export const addWorkout = async (workout) => {
 };
 
 
+ // Update an existing workout record
+export const updateWorkout = async (workoutId, updatedData) => {
+  try {
+    // 1. Get all existing workout records
+    const workouts = await loadWorkouts();
+
+    // 2. Find the workout and update its information
+    const updatedWorkouts = workouts.map((workout) =>
+      workout.id === workoutId
+        ? { ...workout, ...updatedData }
+        : workout
+    );
+
+    // 3. Check if the workout exists
+    const workoutExists = workouts.some(
+      (workout) => workout.id === workoutId
+    );
+
+    if (!workoutExists) {
+      throw new Error('Workout not found.');
+    }
+
+    // 4. Save the updated workout collection
+    await saveWorkouts(updatedWorkouts);
+
+    // 5. Return the updated collection
+    return updatedWorkouts;
+  } catch (error) {
+    console.error('Error updating workout:', error);
+    throw error;
+  }
+};
+
+
 // Delete all workout records from local storage
 export const clearWorkouts = async () => {
   try {
