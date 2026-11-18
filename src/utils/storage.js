@@ -163,10 +163,19 @@ export const updateWorkout = async (workoutId, updatedData) => {
  // Delete one workout record using its ID
 export const deleteWorkout = async (workoutId) => {
   try {
-    // 1. Get all existing workout records
+    // 1. Validate the workout ID
+    if (
+      workoutId === undefined ||
+      workoutId === null ||
+      String(workoutId).trim() === ''
+    ) {
+      throw new Error('Workout ID is required.');
+    }
+
+    // 2. Get all existing workout records
     const workouts = await loadWorkouts();
 
-    // 2. Check if the workout exists
+    // 3. Check if the workout exists
     const workoutExists = workouts.some(
       (workout) => workout.id === workoutId
     );
@@ -175,15 +184,15 @@ export const deleteWorkout = async (workoutId) => {
       throw new Error('Workout not found.');
     }
 
-    // 3. Remove the selected workout
+    // 4. Remove the selected workout
     const updatedWorkouts = workouts.filter(
       (workout) => workout.id !== workoutId
     );
 
-    // 4. Save the remaining workout records
+    // 5. Save the remaining workout records
     await saveWorkouts(updatedWorkouts);
 
-    // 5. Return the updated collection
+    // 6. Return the updated collection
     return updatedWorkouts;
   } catch (error) {
     console.error('Error deleting workout:', error);
