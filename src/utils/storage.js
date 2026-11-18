@@ -95,17 +95,44 @@ export const addWorkout = async (workout) => {
  // Update an existing workout record
 export const updateWorkout = async (workoutId, updatedData) => {
   try {
-    // 1. Get all existing workout records
+    // 1. Validate the workout ID
+    if (
+      workoutId === undefined ||
+      workoutId === null ||
+      String(workoutId).trim() === ''
+    ) {
+      throw new Error('Workout ID is required.');
+    }
+
+    // 2. Validate the updated information
+    if (
+      !updatedData ||
+      typeof updatedData !== 'object' ||
+      Array.isArray(updatedData)
+    ) {
+      throw new Error('Invalid workout update data.');
+    }
+
+    // 3. Prevent changing the workout ID
+    if (Object.prototype.hasOwnProperty.call(updatedData, 'id')) {
+      throw new Error('Workout ID cannot be changed.');
+    }
+
+    // 4. Validate workout name if it is being updated
+    if (
+      Object.prototype.hasOwnProperty.call(updatedData, 'workoutName') &&
+      (
+        typeof updatedData.workoutName !== 'string' ||
+        updatedData.workoutName.trim() === ''
+      )
+    ) {
+      throw new Error('Workout name cannot be empty.');
+    }
+
+    // 5. Get all existing workout records
     const workouts = await loadWorkouts();
 
-    // 2. Find the workout and update its information
-    const updatedWorkouts = workouts.map((workout) =>
-      workout.id === workoutId
-        ? { ...workout, ...updatedData }
-        : workout
-    );
-
-    // 3. Check if the workout exists
+    // 6. Check if the workout exists
     const workoutExists = workouts.some(
       (workout) => workout.id === workoutId
     );
@@ -114,16 +141,24 @@ export const updateWorkout = async (workoutId, updatedData) => {
       throw new Error('Workout not found.');
     }
 
-    // 4. Save the updated workout collection
+    // 7. Update only the selected workout
+    const updatedWorkouts = workouts.map((workout) =>
+      workout.id === workoutId
+        ? { ...workout, ...updatedData }
+        : workout
+    );
+
+    // 8. Save the updated collection
     await saveWorkouts(updatedWorkouts);
 
-    // 5. Return the updated collection
+    // 9. Return the updated collection
     return updatedWorkouts;
   } catch (error) {
     console.error('Error updating workout:', error);
     throw error;
   }
 };
+
 
  // Delete one workout record using its ID
 export const deleteWorkout = async (workoutId) => {
