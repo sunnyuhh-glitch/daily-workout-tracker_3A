@@ -9,6 +9,7 @@ import React, {
 import {
   loadWorkouts,
   addWorkout as saveWorkout,
+  deleteWorkout as removeWorkout,
 } from '../utils/storage';
 
 // 1. Create the Workout Context
@@ -33,6 +34,20 @@ export const WorkoutProvider = ({ children }) => {
     getWorkouts();
   }, []);
 
+  // Delete a workout and update the shared state
+const deleteWorkoutFromContext = useCallback(async (workoutId) => {
+  try {
+    const updatedWorkouts = await removeWorkout(workoutId);
+
+    setWorkouts(updatedWorkouts);
+
+    return updatedWorkouts;
+  } catch (error) {
+    console.error('Error deleting workout from context:', error);
+    throw error;
+  }
+}, []);
+
     // Add a workout and update the shared state
   const addWorkoutToContext = useCallback(async (workout) => {
     try {
@@ -48,11 +63,12 @@ export const WorkoutProvider = ({ children }) => {
   }, []);
 
   // 3. Share workout data and its updater
-  const value = {
-    workouts,
-    setWorkouts,
-    addWorkout: addWorkoutToContext,
-  };
+ const value = {
+  workouts,
+  setWorkouts,
+  addWorkout: addWorkoutToContext,
+  deleteWorkout: deleteWorkoutFromContext,
+};
 
   return (
     <WorkoutContext.Provider value={value}>

@@ -5,6 +5,8 @@ import {
   FlatList,
   StyleSheet,
   StatusBar,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,7 +16,10 @@ import { useWorkout } from '../context/WorkoutContext';
 
 
 export default function HistoryScreen() {
-  const { workouts: workoutHistory } = useWorkout();
+  const {
+    workouts: workoutHistory,
+    deleteWorkout,
+  } = useWorkout();
 
   const totalSessions = workoutHistory.length;
 
@@ -28,6 +33,34 @@ const totalSets = workoutHistory.reduce(
   0
 );
 
+const confirmDeleteWorkout = (workout) => {
+  Alert.alert(
+    'Delete Workout',
+    `Are you sure you want to delete "${workout.workoutName}"?`,
+    [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await deleteWorkout(workout.id);
+            console.log('Workout deleted successfully!');
+          } catch (error) {
+            Alert.alert(
+              'Deletion Failed',
+              'Unable to delete this workout. Please try again.'
+            );
+            console.error('Error deleting workout:', error);
+          }
+        },
+      },
+    ]
+  );
+};
   const renderWorkout = ({ item }) => (
     <View style={styles.workoutCard}>
       <View style={styles.cardTop}>
@@ -52,6 +85,16 @@ const totalSets = workoutHistory.reduce(
             Completed
           </Text>
         </View>
+
+       <TouchableOpacity
+  style={styles.deleteButton}
+  onPress={() => confirmDeleteWorkout(item)}
+>
+  <Text style={styles.deleteButtonText}>
+    Delete
+  </Text>
+</TouchableOpacity>
+
       </View>
 
       <View style={styles.divider} />
@@ -148,13 +191,6 @@ const totalSets = workoutHistory.reduce(
         </View>
       </View>
 
-      {/* Prototype Notice */}
-      <View style={styles.prototypeNotice}>
-        <Text style={styles.prototypeIcon}>
-          ℹ️
-        </Text>
-      </View>
-
       <Text style={styles.sectionTitle}>
         Recent Workouts
       </Text>
@@ -192,6 +228,21 @@ const totalSets = workoutHistory.reduce(
 }
 
 const styles = StyleSheet.create({
+
+  deleteButton: {
+  backgroundColor: '#FEE2E2',
+  paddingHorizontal: 10,
+  paddingVertical: 7,
+  borderRadius: 8,
+  marginLeft: 8,
+},
+
+deleteButtonText: {
+  color: '#DC2626',
+  fontSize: 10,
+  fontWeight: 'bold',
+},
+
   container: {
     flex: 1,
     backgroundColor: '#F5F7FB',
