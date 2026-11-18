@@ -1,6 +1,8 @@
 import React from 'react';
 
+import { WorkoutProvider } from './src/context/WorkoutContext';
 import { NavigationContainer } from '@react-navigation/native';
+
 
 import {
   createNativeStackNavigator,
@@ -17,6 +19,7 @@ import RepCounterScreen from './src/screens/RepCounterScreen';
 import WorkoutSummaryScreen from './src/screens/WorkoutSummaryScreen';
 import HistoryScreen from './src/screens/HistoryScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -105,7 +108,8 @@ function TabIcon({ icon, color }) {
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <WorkoutProvider>
+      <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
@@ -151,7 +155,8 @@ export default function App() {
             headerBackVisible: false,
           }}
         />
-      </Stack.Navigator>
-    </NavigationContainer>
+           </Stack.Navigator>
+      </NavigationContainer>
+    </WorkoutProvider>
   );
 }
