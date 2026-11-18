@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -8,17 +8,64 @@ import {
 } from 'react-native';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useWorkout } from '../context/WorkoutContext';
 
 export default function WorkoutSummaryScreen({
   navigation,
   route,
 }) {
+  // Access the shared workout saving function
+  const { addWorkout } = useWorkout();
+
+  // Prevent duplicate workout saving
+  const hasSavedWorkout = useRef(false);
+
+  // Receive workout information
   const {
     workoutName = 'Workout',
     totalExercises = 0,
     totalSets = 0,
     totalReps = 0,
   } = route.params || {};
+
+  // Save completed workout when the Summary screen appears
+  useEffect(() => {
+    const saveCompletedWorkout = async () => {
+      if (hasSavedWorkout.current) {
+        return;
+      }
+
+      hasSavedWorkout.current = true;
+
+      try {
+        const newWorkout = {
+          id: Date.now().toString(),
+          workoutName,
+          totalExercises,
+          totalSets,
+          totalReps,
+          date: new Date().toISOString(),
+        };
+
+        await addWorkout(newWorkout);
+
+        console.log('Workout saved successfully!');
+      } catch (error) {
+        hasSavedWorkout.current = false;
+        console.error('Failed to save workout:', error);
+      }
+    };
+
+    saveCompletedWorkout();
+  }, [
+    addWorkout,
+    workoutName,
+    totalExercises,
+    totalSets,
+    totalReps,
+  ]);
+
+  // Keep your existing goHome function below this...
 
   const goHome = () => {
     navigation.reset({

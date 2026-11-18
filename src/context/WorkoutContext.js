@@ -3,6 +3,7 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useCallback,
 } from 'react';
 
 import {
@@ -32,8 +33,8 @@ export const WorkoutProvider = ({ children }) => {
     getWorkouts();
   }, []);
 
-  // Add a workout and update the shared state
-  const addWorkoutToContext = async (workout) => {
+    // Add a workout and update the shared state
+  const addWorkoutToContext = useCallback(async (workout) => {
     try {
       const updatedWorkouts = await saveWorkout(workout);
 
@@ -44,7 +45,7 @@ export const WorkoutProvider = ({ children }) => {
       console.error('Error adding workout to context:', error);
       throw error;
     }
-  };
+  }, []);
 
   // 3. Share workout data and its updater
   const value = {
