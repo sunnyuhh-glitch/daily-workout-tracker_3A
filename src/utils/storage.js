@@ -35,19 +35,55 @@ export const loadWorkouts = async () => {
 };
 
 
+
 // Add one new workout record
 export const addWorkout = async (workout) => {
   try {
-    // 1. Get previously saved workouts
+    // 1. Check if the workout is a valid object
+    if (
+      !workout ||
+      typeof workout !== 'object' ||
+      Array.isArray(workout)
+    ) {
+      throw new Error('Invalid workout record.');
+    }
+
+    // 2. Check if the workout has an ID
+    if (
+      workout.id === undefined ||
+      workout.id === null ||
+      String(workout.id).trim() === ''
+    ) {
+      throw new Error('Workout ID is required.');
+    }
+
+    // 3. Check if the workout has a valid name
+    if (
+      typeof workout.workoutName !== 'string' ||
+      workout.workoutName.trim() === ''
+    ) {
+      throw new Error('Workout name is required.');
+    }
+
+    // 4. Get previously saved workouts
     const workouts = await loadWorkouts();
 
-    // 2. Add the new workout to the existing list
+    // 5. Prevent duplicate workout IDs
+    const workoutExists = workouts.some(
+      (item) => item.id === workout.id
+    );
+
+    if (workoutExists) {
+      throw new Error('Workout ID already exists.');
+    }
+
+    // 6. Add the new workout to the existing list
     const updatedWorkouts = [...workouts, workout];
 
-    // 3. Save the updated list
+    // 7. Save the updated list
     await saveWorkouts(updatedWorkouts);
 
-    // 4. Return the updated list
+    // 8. Return the updated list
     return updatedWorkouts;
   } catch (error) {
     console.error('Error adding workout:', error);
@@ -88,7 +124,6 @@ export const updateWorkout = async (workoutId, updatedData) => {
     throw error;
   }
 };
-
 
  // Delete one workout record using its ID
 export const deleteWorkout = async (workoutId) => {
