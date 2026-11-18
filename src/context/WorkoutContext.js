@@ -5,7 +5,10 @@ import React, {
   useEffect,
 } from 'react';
 
-import { loadWorkouts } from '../utils/storage';
+import {
+  loadWorkouts,
+  addWorkout as saveWorkout,
+} from '../utils/storage';
 
 // 1. Create the Workout Context
 const WorkoutContext = createContext();
@@ -15,24 +18,39 @@ export const WorkoutProvider = ({ children }) => {
   const [workouts, setWorkouts] = useState([]);
 
   // Load saved workouts when the provider starts
-useEffect(() => {
-  const getWorkouts = async () => {
-    try {
-      const savedWorkouts = await loadWorkouts();
+  useEffect(() => {
+    const getWorkouts = async () => {
+      try {
+        const savedWorkouts = await loadWorkouts();
 
-      setWorkouts(savedWorkouts);
+        setWorkouts(savedWorkouts);
+      } catch (error) {
+        console.error('Error loading workouts:', error);
+      }
+    };
+
+    getWorkouts();
+  }, []);
+
+  // Add a workout and update the shared state
+  const addWorkoutToContext = async (workout) => {
+    try {
+      const updatedWorkouts = await saveWorkout(workout);
+
+      setWorkouts(updatedWorkouts);
+
+      return updatedWorkouts;
     } catch (error) {
-      console.error('Error loading workouts:', error);
+      console.error('Error adding workout to context:', error);
+      throw error;
     }
   };
-
-  getWorkouts();
-}, []);
 
   // 3. Share workout data and its updater
   const value = {
     workouts,
     setWorkouts,
+    addWorkout: addWorkoutToContext,
   };
 
   return (
