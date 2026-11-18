@@ -9,68 +9,41 @@ import {
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// Sample workout history for the MCO1 prototype.
-// Persistent workout saving will be implemented in MCO2.
-const workoutHistory = [
-  {
-    id: '1',
-    name: 'Full Body Workout',
-    date: 'Today',
-    exercises: 3,
-    sets: 12,
-    reps: 108,
-    icon: '🏋️',
-  },
-  {
-    id: '2',
-    name: 'Upper Body',
-    date: 'Yesterday',
-    exercises: 2,
-    sets: 6,
-    reps: 66,
-    icon: '💪',
-  },
-  {
-    id: '3',
-    name: 'Core Workout',
-    date: 'September 28',
-    exercises: 2,
-    sets: 6,
-    reps: 60,
-    icon: '🔥',
-  },
-  
-];
+import { useWorkout } from '../context/WorkoutContext';
+
+
 
 export default function HistoryScreen() {
+  const { workouts: workoutHistory } = useWorkout();
+
   const totalSessions = workoutHistory.length;
 
-  const totalReps = workoutHistory.reduce(
-    (total, workout) => total + workout.reps,
-    0
-  );
+const totalReps = workoutHistory.reduce(
+  (total, workout) => total + (workout.totalReps || 0),
+  0
+);
 
-  const totalSets = workoutHistory.reduce(
-    (total, workout) => total + workout.sets,
-    0
-  );
+const totalSets = workoutHistory.reduce(
+  (total, workout) => total + (workout.totalSets || 0),
+  0
+);
 
   const renderWorkout = ({ item }) => (
     <View style={styles.workoutCard}>
       <View style={styles.cardTop}>
         <View style={styles.workoutIcon}>
           <Text style={styles.workoutEmoji}>
-            {item.icon}
+            {'🏋️'}
           </Text>
         </View>
 
         <View style={styles.workoutInfo}>
           <Text style={styles.workoutName}>
-            {item.name}
+            {item.workoutName}
           </Text>
 
           <Text style={styles.workoutDate}>
-            {item.date}
+            {new Date(item.date).toLocaleDateString()}
           </Text>
         </View>
 
@@ -86,7 +59,7 @@ export default function HistoryScreen() {
       <View style={styles.statsRow}>
         <View style={styles.stat}>
           <Text style={styles.statNumber}>
-            {item.exercises}
+            {item.totalExercises}
           </Text>
 
           <Text style={styles.statLabel}>
@@ -98,7 +71,7 @@ export default function HistoryScreen() {
 
         <View style={styles.stat}>
           <Text style={styles.statNumber}>
-            {item.sets}
+            {item.totalSets}
           </Text>
 
           <Text style={styles.statLabel}>
@@ -110,7 +83,7 @@ export default function HistoryScreen() {
 
         <View style={styles.stat}>
           <Text style={styles.statNumber}>
-            {item.reps}
+            {item.totalReps}
           </Text>
 
           <Text style={styles.statLabel}>
@@ -180,10 +153,6 @@ export default function HistoryScreen() {
         <Text style={styles.prototypeIcon}>
           ℹ️
         </Text>
-
-        <Text style={styles.prototypeText}>
-          Sample workout history for prototype preview.
-        </Text>
       </View>
 
       <Text style={styles.sectionTitle}>
@@ -206,6 +175,17 @@ export default function HistoryScreen() {
         ListHeaderComponent={ListHeader}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
+        ListEmptyComponent={
+  <View style={{ alignItems: 'center', padding: 30 }}>
+    <Text style={{ fontSize: 40 }}>🏋️</Text>
+    <Text style={{ fontSize: 16, fontWeight: 'bold', marginTop: 10 }}>
+      No Workouts Yet
+    </Text>
+    <Text style={{ textAlign: 'center', marginTop: 5 }}>
+      Complete your first workout to see your history here!
+    </Text>
+  </View>
+}
       />
     </SafeAreaView>
   );
